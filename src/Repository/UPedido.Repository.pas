@@ -30,9 +30,9 @@ begin
       'RETURNING NUMERO_PEDIDO';
 
     LQuery.ParamByName('CODIGO_CLIENTE').AsInteger := APedido.CodigoCliente;
-    LQuery.ParamByName('DATA_EMISSAO').AsDateTime := APedido.DataEmissao;
-    LQuery.ParamByName('VALOR_TOTAL').AsFloat := APedido.ValorTotal;
-    LQuery.ParamByName('OBSERVACAO').AsString := APedido.Observacao;
+    LQuery.ParamByName('DATA_EMISSAO').AsDateTime  := APedido.DataEmissao;
+    LQuery.ParamByName('VALOR_TOTAL').AsFloat      := APedido.ValorTotal;
+    LQuery.ParamByName('OBSERVACAO').AsString      := APedido.Observacao;
     LQuery.Open;
 
     Result := LQuery.FieldByName('NUMERO_PEDIDO').AsInteger;
