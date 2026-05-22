@@ -1,0 +1,44 @@
+unit UCliente.Repository;
+
+interface
+
+uses
+  UBase.Repository, UCliente.Model, FireDAC.Comp.Client, FireDAC.DApt,
+  System.SysUtils;
+
+type
+  TClienteRepository = class(TBaseRepository)
+  public
+    function GetByCodigo(ACodigo: Integer): TCliente;
+  end;
+
+implementation
+
+{ TClienteRepository }
+
+function TClienteRepository.GetByCodigo(ACodigo: Integer): TCliente;
+var
+  LQuery: TFDQuery;
+begin
+  Result := nil;
+  LQuery := CreateQuery;
+
+  try
+    LQuery.SQL.Text := 'SELECT CODIGO, NOME, CIDADE, UF FROM CLIENTE WHERE CODIGO = :CODIGO';
+    LQuery.ParamByName('CODIGO').AsInteger := ACodigo;
+    LQuery.Open;
+
+    if not LQuery.Eof then
+    begin
+      Result        := TCliente.Create;
+      Result.Codigo := LQuery.FieldByName('CODIGO').AsInteger;
+      Result.Nome   := LQuery.FieldByName('NOME').AsString;
+      Result.Cidade := LQuery.FieldByName('CIDADE').AsString;
+      Result.UF     := LQuery.FieldByName('UF').AsString;
+    end;
+  finally
+    LQuery.Free;
+  end;
+end;
+
+end.

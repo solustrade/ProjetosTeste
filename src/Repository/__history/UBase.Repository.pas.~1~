@@ -1,0 +1,32 @@
+unit UBase.Repository;
+
+interface
+
+uses
+  FireDAC.Comp.Client, UConnection;
+
+type
+  TBaseRepository = class
+  protected
+    FConnection: TFDConnection;
+    function CreateQuery: TFDQuery;
+  public
+    constructor Create; virtual;
+  end;
+
+implementation
+
+{ TBaseRepository }
+
+constructor TBaseRepository.Create;
+begin
+  FConnection := TConnection.GetConnection;
+end;
+
+function TBaseRepository.CreateQuery: TFDQuery;
+begin
+  Result := TFDQuery.Create(nil);
+  Result.Connection := FConnection;
+end;
+
+end.

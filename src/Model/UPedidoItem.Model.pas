@@ -1,0 +1,27 @@
+﻿﻿unit UPedidoItem.Model;
+
+interface
+
+type
+  TPedidoItem = class
+  private
+    FID: Integer;
+    FNumeroPedido: Integer;
+    FCodigoProduto: Integer;
+    FDescricaoProduto: string; // Auxiliar para exibição no grid
+    FQuantidade: Double;
+    FValorUnitario: Double;
+    FValorTotal: Double;
+  public
+    property ID: Integer              read FID               write FID;
+    property NumeroPedido: Integer    read FNumeroPedido     write FNumeroPedido;
+    property CodigoProduto: Integer   read FCodigoProduto    write FCodigoProduto;
+    property DescricaoProduto: string read FDescricaoProduto write FDescricaoProduto;
+    property Quantidade: Double       read FQuantidade       write FQuantidade;
+    property ValorUnitario: Double    read FValorUnitario    write FValorUnitario;
+    property ValorTotal: Double       read FValorTotal       write FValorTotal;
+  end;
+
+implementation
+
+end.

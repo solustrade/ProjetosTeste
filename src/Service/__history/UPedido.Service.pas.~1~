@@ -1,0 +1,74 @@
+unit UPedido.Service;
+
+interface
+
+uses
+  UPedido.Model, UPedido.Repository, UCliente.Model, UCliente.Repository,
+  UProduto.Model, UProduto.Repository, UConnection, System.SysUtils,
+  FireDAC.Comp.Client;
+
+type
+  TPedidoService = class
+  private
+    FPedidoRepository: TPedidoRepository;
+    FClienteRepository: TClienteRepository;
+    FProdutoRepository: TProdutoRepository;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    function GetCliente(ACodigo: Integer): TCliente;
+    function GetProduto(ACodigo: Integer): TProduto;
+    function SalvarPedido(APedido: TPedido): Integer;
+  end;
+
+implementation
+
+{ TPedidoService }
+
+constructor TPedidoService.Create;
+begin
+  FPedidoRepository := TPedidoRepository.Create;
+  FClienteRepository := TClienteRepository.Create;
+  FProdutoRepository := TProdutoRepository.Create;
+end;
+
+destructor TPedidoService.Destroy;
+begin
+  FPedidoRepository.Free;
+  FClienteRepository.Free;
+  FProdutoRepository.Free;
+  inherited;
+end;
+
+function TPedidoService.GetCliente(ACodigo: Integer): TCliente;
+begin
+  Result := FClienteRepository.GetByCodigo(ACodigo);
+end;
+
+function TPedidoService.GetProduto(ACodigo: Integer): TProduto;
+begin
+  Result := FProdutoRepository.GetByCodigo(ACodigo);
+end;
+
+function TPedidoService.SalvarPedido(APedido: TPedido): Integer;
+var
+  LConn: TFDConnection;
+begin
+  if APedido.Itens.Count = 0 then
+    raise Exception.Create('O pedido deve ter pelo menos um item.');
+
+  LConn := TConnection.GetConnection;
+  LConn.StartTransaction;
+  try
+    Result := FPedidoRepository.Salvar(APedido);
+    LConn.Commit;
+  except
+    on E: Exception do
+    begin
+      LConn.Rollback;
+      raise Exception.Create('Erro ao salvar pedido: ' + E.Message);
+    end;
+  end;
+end;
+
+end.

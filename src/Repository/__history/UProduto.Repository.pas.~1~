@@ -1,0 +1,41 @@
+unit UProduto.Repository;
+
+interface
+
+uses
+  UBase.Repository, UProduto.Model, FireDAC.Comp.Client, System.SysUtils;
+
+type
+  TProdutoRepository = class(TBaseRepository)
+  public
+    function GetByCodigo(ACodigo: Integer): TProduto;
+  end;
+
+implementation
+
+{ TProdutoRepository }
+
+function TProdutoRepository.GetByCodigo(ACodigo: Integer): TProduto;
+var
+  LQuery: TFDQuery;
+begin
+  Result := nil;
+  LQuery := CreateQuery;
+  try
+    LQuery.SQL.Text := 'SELECT CODIGO, DESCRICAO, PRECO_VENDA FROM PRODUTO WHERE CODIGO = :CODIGO';
+    LQuery.ParamByName('CODIGO').AsInteger := ACodigo;
+    LQuery.Open;
+
+    if not LQuery.Eof then
+    begin
+      Result := TProduto.Create;
+      Result.Codigo := LQuery.FieldByName('CODIGO').AsInteger;
+      Result.Descricao := LQuery.FieldByName('DESCRICAO').AsString;
+      Result.PrecoVenda := LQuery.FieldByName('PRECO_VENDA').AsFloat;
+    end;
+  finally
+    LQuery.Free;
+  end;
+end;
+
+end.

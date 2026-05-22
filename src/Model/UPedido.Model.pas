@@ -1,0 +1,46 @@
+unit UPedido.Model;
+
+interface
+
+uses
+  System.SysUtils, System.Generics.Collections, UPedidoItem.Model;
+
+type
+  TPedido = class
+  private
+    FNumeroPedido: Integer;
+    FDataEmissao: TDateTime;
+    FCodigoCliente: Integer;
+    FValorTotal: Double;
+    FObservacao: string;
+    FItens: TObjectList<TPedidoItem>;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    property NumeroPedido: Integer  read FNumeroPedido  write FNumeroPedido;
+    property DataEmissao: TDateTime read FDataEmissao   write FDataEmissao;
+    property CodigoCliente: Integer read FCodigoCliente write FCodigoCliente;
+    property ValorTotal: Double     read FValorTotal    write FValorTotal;
+    property Observacao: string     read FObservacao    write FObservacao;
+    property Itens: TObjectList<TPedidoItem> read FItens;
+  end;
+
+implementation
+
+{ TPedido }
+
+constructor TPedido.Create;
+begin
+  FItens       := TObjectList<TPedidoItem>.Create;
+  FDataEmissao := Now;
+  FValorTotal  := 0;
+end;
+
+destructor TPedido.Destroy;
+begin
+  FItens.Free;
+
+  inherited;
+end;
+
+end.
